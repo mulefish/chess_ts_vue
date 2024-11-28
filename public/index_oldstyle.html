@@ -1,0 +1,260 @@
+<html>
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <script>
+const rook = "rook"
+const knight = "knight"
+const bishop = "bishop"
+const king = "king"
+const queen = "queen"
+const pawn = "pawn"
+const white = "white"
+const black = "black"
+function getIcon(color, kind) {
+    if ( color === white ) {
+        switch(kind){
+            case(pawn): return "&#9817;"
+            case(rook): return "&#9814;"
+            case(knight): return "&#9816;"
+            case(bishop): return "&#9815;"
+            case(queen): return "&#9813;"
+            case(king): return "&#9812;"
+            default: return null
+        }
+    } else {
+        switch(kind){
+            case(pawn): return "Pa"
+            case(rook): return "Ro"
+            case(knight): return "Kn"
+            case(bishop): return "Bi"
+            case(queen): return "Qu"
+            case(king): return "Kg"
+            default: return null
+        }
+    }
+}
+
+
+
+let cells = {}
+let pieces = {}
+class Piece {
+    constructor(id, row, col, color, kind) {
+        this.id = id
+        this.row = row 
+        this.col = col 
+        this.color = color 
+        this.kind = kind 
+        this.icon = getIcon(color, kind)    
+        this.css = color === white ? "white-piece" : "black-piece"    
+    }
+    getHtml() { 
+        return `<i class="fas fa-chess-${this.kind} ${this.css}" onclick='pieceClicked("${this.id}")'></i>`
+    }
+    getLocation() { 
+        return this.row + "|" + this.col
+    }
+}
+
+pieces[1] = new Piece(1, 1,7, white, pawn, [[0,1]])
+pieces[2] = new Piece(2, 2,7, white, pawn, [[0,1]])
+pieces[3] = new Piece(3, 3,7, white, pawn, [[0,1]])
+pieces[4] = new Piece(4, 4,7, white, pawn, [[0,1]])
+pieces[5] = new Piece(5, 5,7, white, pawn, [[0,1]])
+pieces[6] = new Piece(6, 6,7, white, pawn, [[0,1]])
+pieces[7] = new Piece(7, 7,7, white, pawn, [[0,2]])
+pieces[8] = new Piece(8, 8,7, white, pawn, [[0,1]])
+
+pieces[9] = new Piece(9, 1,8, white, rook, [])
+pieces[10] = new Piece(10, 2,8, white, knight, [])
+pieces[11] = new Piece(11,3,8, white, bishop, [])
+pieces[12] = new Piece(12,4,8, white, queen, [])
+pieces[13] = new Piece(13,5,8, white, king, [])
+pieces[14] = new Piece(14,6,8, white, bishop, [])
+pieces[15] = new Piece(15,7,8, white, knight, [])
+pieces[16] = new Piece(16, 8,8, white, rook, [])
+//
+pieces[17] = new Piece(17, 1,2, black, pawn, [[0,1]])
+pieces[18] = new Piece(18, 2,2, black, pawn, [[0,1]])
+pieces[19] = new Piece(19, 3,2, black, pawn, [[0,1]])
+pieces[20] = new Piece(20, 4,2, black, pawn, [[0,1]])
+pieces[21] = new Piece(21, 5,2, black, pawn, [[0,1]])
+pieces[22] = new Piece(22, 6,2, black, pawn, [[0,1]])
+pieces[23] = new Piece(23, 7,2, black, pawn, [[0,2]])
+pieces[24] = new Piece(24, 8,2, black, pawn, [[0,1]])
+
+pieces[25] = new Piece(25, 1,1, black, rook, [])
+pieces[26] = new Piece(26, 2,1, black, knight, [])
+pieces[27] = new Piece(27, 3,1, black, bishop, [])
+pieces[28] = new Piece(28, 4,1, black, queen, [])
+pieces[29] = new Piece(29, 5,1, black, king, [])
+pieces[30] = new Piece(30, 6,1, black, bishop, [])
+pieces[31] = new Piece(31, 7,1, black, knight, [])
+pieces[32] = new Piece(32, 8,1, black, rook, [])
+
+
+
+
+class Cell { 
+    constructor(row, col, number, css) {
+        this.row = row 
+        this.col = col 
+        this.number = number
+        this.css = css
+        this.id = row + "|" + col
+    }
+    getId() {
+        return this.id
+    }
+    getHtml() {
+        return `<td class="${this.css}" id="${this.id}">${this.id}</td>`
+    }
+}
+
+function buildCells() {
+    let number = 0 
+    let tick = 0 
+    for ( let row = 1; row < 9; row++ ) { 
+        tick++
+
+        for ( let col = 1; col < 9; col++ ) { 
+            const css = tick % 2 === 0 ? "feltgreen" : "offwhite"
+            const c = new Cell(col, row, number, css)
+            cells[c.getId()] = c
+            number++
+            tick++
+        }
+    }
+    let table = "<table>"
+    let i = 0 
+    for ( let k in cells ) {
+        if ( i === 0 ) { 
+            table += "<tr>"
+        }
+        table += cells[k].getHtml()
+        i++
+        if ( i === 8 ) {
+            table += "</tr>"
+            i = 0
+        }
+    }
+    table += "</table>"
+
+    document.getElementById("board").innerHTML = table 
+}
+function pieceClicked(id) {
+    console.log( id +  " was clicked ")
+}
+function placePieces() { 
+    for ( let k in pieces) {        
+        const p = pieces[k] 
+        const id = p.getLocation()
+        document.getElementById(id).innerHTML = p.getHtml()
+    }
+}
+
+
+    </script>
+    <style>
+        .feltgreen {
+    background-color: green;
+    height: 80px;
+    width: 80px;
+}
+
+
+.offwhite {
+    background-color: #909090;
+    height: 80px;
+    width: 80px;
+
+}
+
+.greenNumber {
+    position: relative;
+    z-index: 1;
+    color: #F8F0E3;
+    margin-left: 3px;
+    font-size: 11px;
+}
+
+.whiteNumber {
+    position: relative;
+    z-index: 1;
+    color: green;
+    margin-left: 3px;
+    font-size: 11px;
+}
+
+.whiteLetter {
+    position: relative;
+    z-index: 2;
+    font-size: 11px;
+    color: green;
+}
+
+.greenLetter {
+    position: relative;
+    z-index: 2;
+    font-size: 11px;
+    color: #F8F0E3;
+}
+
+
+.white-piece {
+    font-size: 60px; 
+    color: white;
+}
+
+.black-piece {
+    font-size: 60px; 
+    color: black;
+}
+#board {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+/* 
+.offwhite:hover {
+    background-color: yellow;
+}
+
+.feltgreen:hover {
+    background-color: yellow;
+}
+*/ 
+.possible {
+    background-color: orange;
+}
+    </style>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td valign="top">
+                <div id="board"></div>
+            </td>
+            <td valign="top">
+                &nbsp;
+            </td>
+            <td valign="top">
+                <div id='activeCell'></div>
+                <div id='activePiece'></div>
+            </td>
+        </tr>
+    </table>
+    <hr />
+    <script>
+        buildCells()
+        placePieces()
+    </script>
+</body>
+
+</html>
