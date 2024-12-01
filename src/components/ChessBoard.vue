@@ -7,11 +7,13 @@
           :key="col"
           :class="getCellCss(row, col)"
           :id="getCellId(row, col)"
+          @dragover.prevent="onDragOver"
+          @drop="onDrop(row, col)"
         >
           <ChessPiece
             v-if="getPieceAt(row, col)"
             :piece="getPieceAt(row, col)"
-            @click="handlePieceClick(getPieceAt(row, col))"
+            @drag-start="onDragStart"
           />
         </td>
       </tr>
@@ -49,7 +51,6 @@ export default {
         { id: 14, row: 1, col: 6, color: 'white', kind: 'bishop' },
         { id: 15, row: 1, col: 7, color: 'white', kind: 'knight' },
         { id: 16, row: 1, col: 8, color: 'white', kind: 'rook' },
-
         // Black pieces
         { id: 17, row: 7, col: 1, color: 'black', kind: 'pawn' },
         { id: 18, row: 7, col: 2, color: 'black', kind: 'pawn' },
@@ -68,6 +69,7 @@ export default {
         { id: 31, row: 8, col: 7, color: 'black', kind: 'knight' },
         { id: 32, row: 8, col: 8, color: 'black', kind: 'rook' },
       ],
+      draggingPiece: null,
     };
   },
   methods: {
@@ -81,8 +83,21 @@ export default {
     getPieceAt(row, col) {
       return this.pieces.find((piece) => piece.row === row && piece.col === col);
     },
-    handlePieceClick(piece) {
-      this.$emit('pieceClicked', piece);
+    onDragStart(piece) {
+      this.draggingPiece = piece;
+    },
+    onDragOver(event) {
+      event.preventDefault(); // Allow the drop
+    },
+    onDrop(row, col) {
+      return () => {
+        if (this.draggingPiece) {
+          // Update the dragging piece's position
+          this.draggingPiece.row = row;
+          this.draggingPiece.col = col;
+          this.draggingPiece = null; // Reset the dragging state
+        }
+      };
     },
   },
 };
@@ -101,5 +116,9 @@ export default {
   height: 80px;
   width: 80px;
   text-align: center;
+}
+
+td {
+  position: relative;
 }
 </style>

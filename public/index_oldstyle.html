@@ -40,13 +40,15 @@ function getIcon(color, kind) {
 
 let cells = {}
 let pieces = {}
+let possibleCells = []
 class Piece {
-    constructor(id, row, col, color, kind) {
+    constructor(id, row, col, color, kind, moves) {
         this.id = id
         this.row = row 
         this.col = col 
         this.color = color 
         this.kind = kind 
+        this.moves = moves 
         this.icon = getIcon(color, kind)    
         this.css = color === white ? "white-piece" : "black-piece"    
     }
@@ -67,23 +69,23 @@ pieces[6] = new Piece(6, 6,7, white, pawn, [[0,1]])
 pieces[7] = new Piece(7, 7,7, white, pawn, [[0,2]])
 pieces[8] = new Piece(8, 8,7, white, pawn, [[0,1]])
 
-pieces[9] = new Piece(9, 1,8, white, rook, [])
+pieces[9] = new Piece(9,   1,8, white, rook, [[0,1], [0,-1], [-1,0], [1,0]])
 pieces[10] = new Piece(10, 2,8, white, knight, [])
-pieces[11] = new Piece(11,3,8, white, bishop, [])
-pieces[12] = new Piece(12,4,8, white, queen, [])
-pieces[13] = new Piece(13,5,8, white, king, [])
-pieces[14] = new Piece(14,6,8, white, bishop, [])
-pieces[15] = new Piece(15,7,8, white, knight, [])
+pieces[11] = new Piece(11, 3,8, white, bishop, [])
+pieces[12] = new Piece(12, 4,8, white, queen, [])
+pieces[13] = new Piece(13, 5,8, white, king, [])
+pieces[14] = new Piece(14, 6,8, white, bishop, []) 
+pieces[15] = new Piece(15, 7,8, white, knight, [])
 pieces[16] = new Piece(16, 8,8, white, rook, [])
 //
-pieces[17] = new Piece(17, 1,2, black, pawn, [[0,1]])
-pieces[18] = new Piece(18, 2,2, black, pawn, [[0,1]])
-pieces[19] = new Piece(19, 3,2, black, pawn, [[0,1]])
-pieces[20] = new Piece(20, 4,2, black, pawn, [[0,1]])
-pieces[21] = new Piece(21, 5,2, black, pawn, [[0,1]])
-pieces[22] = new Piece(22, 6,2, black, pawn, [[0,1]])
-pieces[23] = new Piece(23, 7,2, black, pawn, [[0,2]])
-pieces[24] = new Piece(24, 8,2, black, pawn, [[0,1]])
+pieces[17] = new Piece(17, 1,2, black, pawn, [[0,-1]])
+pieces[18] = new Piece(18, 2,2, black, pawn, [[0,-1]])
+pieces[19] = new Piece(19, 3,2, black, pawn, [[0,-1]])
+pieces[20] = new Piece(20, 4,2, black, pawn, [[0,-1]])
+pieces[21] = new Piece(21, 5,2, black, pawn, [[0,-1]])
+pieces[22] = new Piece(22, 6,2, black, pawn, [[0,-1]])
+pieces[23] = new Piece(23, 7,2, black, pawn, [[0,-1]])
+pieces[24] = new Piece(24, 8,2, black, pawn, [[0,-1]])
 
 pieces[25] = new Piece(25, 1,1, black, rook, [])
 pieces[26] = new Piece(26, 2,1, black, knight, [])
@@ -140,11 +142,23 @@ function buildCells() {
             i = 0
         }
     }
+
     table += "</table>"
 
     document.getElementById("board").innerHTML = table 
 }
 function pieceClicked(id) {
+    possibleCells = [] 
+
+    pieces[id].moves.forEach((point)=> { 
+        let id = point[0] + "|" + point[1] 
+        possibleCells.push(id)
+    })
+    const x = JSON.stringify( possibleCells, null, 2 )
+    const y = x.split("\n") 
+    const z = y.join("<br/>")
+    document.getElementById("activeCell").innerHTML = z 
+
     console.log( id +  " was clicked ")
 }
 function placePieces() { 

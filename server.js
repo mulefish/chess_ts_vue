@@ -12,6 +12,11 @@ app.get('/oldstyle', (req, res) => {
     console.log("oldstyle")
   res.sendFile(path.join(__dirname, 'public', 'index_oldstyle.html'));
 });
+// Define a route for the root
+app.get('/v2', (req, res) => {
+  console.log("oldstyle")
+res.sendFile(path.join(__dirname, 'public', 'v2.html'));
+});
 
 // Start the server
 app.listen(PORT, () => {
