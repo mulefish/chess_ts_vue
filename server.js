@@ -14,8 +14,16 @@ app.get('/oldstyle', (req, res) => {
 });
 // Define a route for the root
 app.get('/v2', (req, res) => {
-  console.log("oldstyle")
+  console.log("v2")
 res.sendFile(path.join(__dirname, 'public', 'v2.html'));
+});
+
+
+
+// Define a route for the root
+app.get('/v3', (req, res) => {
+  console.log("v3")
+res.sendFile(path.join(__dirname, 'public', 'v3.html'));
 });
 
 // Start the server
