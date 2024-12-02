@@ -1,10 +1,10 @@
 const {
     PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, BLACK,WHITE, 
-    Cell, Piece, placePiece, getPossibleMoveArrays
+    Cell, Piece, placePiece, getPossibleMoveArrays, setup, getBoard
 } = require('./chess.js');
 
 function testRook() {
-    const testRook = new Piece(BLACK, ROOK, 0, 8);
+    const testRook = new Piece("r1", BLACK, ROOK, 0, 8);
     const actual = placePiece(testRook, 20);
     const expected = [28, 36, 44, 52, 60, 12, 4, 21, 22, 23, 19, 18, 17, 16
     ]
@@ -23,8 +23,8 @@ function testRook() {
 
 
 function testBishop() {
-    const testRook = new Piece(BLACK, BISHOP, 0, 8);
-    const actual = placePiece(testRook, 20);
+    const testBishop = new Piece("bi1", BLACK, BISHOP, 0, 8);
+    const actual = placePiece(testBishop, 20);
     const expected = [2, 11, 29, 38, 47, 6, 13, 27, 34, 41, 48]
     expected.sort((a, b) => b - a);
     actual.sort((a, b) => b - a);
@@ -40,8 +40,8 @@ function testBishop() {
 
 
 function testQueen() {
-    const testRook = new Piece(BLACK, QUEEN, 0, 8);
-    const actual = placePiece(testRook, 20);
+    const testQueen = new Piece("qu1", BLACK, QUEEN, 0, 8);
+    const actual = placePiece(testQueen, 20);
     const expected = [2, 11, 29, 38, 47, 6, 13, 27, 34, 41, 48, 28, 36, 44, 52, 60, 12, 4, 21, 22, 23, 19, 18, 17, 16]
     expected.sort((a, b) => b - a);
     actual.sort((a, b) => b - a);
@@ -57,8 +57,8 @@ function testQueen() {
 
 
 function testKing() {
-    const testRook = new Piece(BLACK, KING, 0, 1);
-    const actual = placePiece(testRook, 63);
+    const testKing = new Piece("king", BLACK, KING, 0, 1);
+    const actual = placePiece(testKing, 63);
     const expected = [62, 54, 55]
     expected.sort((a, b) => b - a);
     actual.sort((a, b) => b - a);
@@ -73,8 +73,8 @@ function testKing() {
 }
 
 function testKnight() {
-    const testRook = new Piece(BLACK, KNIGHT, 0, 1);
-    const actual = placePiece(testRook, 20);
+    const testKnight = new Piece("kn1", BLACK, KNIGHT, 0, 1);
+    const actual = placePiece(testKnight, 20);
     const expected = [37, 35, 30, 26, 14, 10, 5, 3]
     expected.sort((a, b) => b - a);
     actual.sort((a, b) => b - a);
@@ -90,7 +90,7 @@ function testKnight() {
 
 
 function testPawn() {
-    const testPawn = new Piece(BLACK, PAWN, 0, 1);
+    const testPawn = new Piece("pawn1", BLACK, PAWN, 0, 1);
     const expected = [-8, -16]
     testPawn.moves.sort((a, b) => b - a);
     const allTrue = JSON.stringify(testPawn.moves) == JSON.stringify(expected)
@@ -117,13 +117,13 @@ function testGetPossibleMoveArrays() {
         blackPawn:[-8, -16]
     }
     const myPieces = { 
-        ro: new Piece(BLACK, ROOK, 0, 8),
-        kn: new Piece(BLACK, KNIGHT, 0, 1),
-        bi: new Piece(BLACK, BISHOP, 0, 8),
-        qu: new Piece(BLACK, QUEEN, 0, 8),
-        ki: new Piece(BLACK, KING, 0, 1),
-        whitePawn:new Piece(WHITE, PAWN, 0, 1),
-        blackPawn:new Piece(BLACK, PAWN, 0, 1),
+        ro: new Piece("one", BLACK, ROOK, 0, 8),
+        kn: new Piece("two", BLACK, KNIGHT, 0, 1),
+        bi: new Piece("three", BLACK, BISHOP, 0, 8),
+        qu: new Piece("four", BLACK, QUEEN, 0, 8),
+        ki: new Piece("five", BLACK, KING, 0, 1),
+        whitePawn:new Piece("six", WHITE, PAWN, 0, 1),
+        blackPawn:new Piece("seven", BLACK, PAWN, 0, 1)
     }
     let boolArray = []
     for ( let k in myPieces ) {
@@ -141,6 +141,19 @@ function testGetPossibleMoveArrays() {
         console.log( boolArray)
     }
 }
+function testSetup() { 
+    setup() 
+    const board = getBoard() 
+    const isOk = board.length == 64 
+    const verdict = isOk ? "PASS" : "FAIL";
+    console.log(verdict + " testSetup");
+ 
+}
+
+
+function testBoardHasPieces() {
+
+}
 testGetPossibleMoveArrays()
 testRook()
 testBishop()
@@ -148,3 +161,5 @@ testQueen()
 testKing()
 testKnight()
 testPawn() 
+testSetup() 
+testBoardHasPieces()

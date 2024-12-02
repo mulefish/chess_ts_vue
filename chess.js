@@ -1,12 +1,13 @@
-const PAWN = "pawn";
-const ROOK = "rook";
-const KNIGHT = "knight";
-const BISHOP = "bishop";
-const QUEEN = "queen";
-const KING = "king";
-const WHITE = "white";
-const BLACK = "black";
-
+const PAWN = "pawn"
+const ROOK = "rook"
+const KNIGHT = "knight"
+const BISHOP = "bishop"
+const QUEEN = "queen"
+const KING = "king"
+const WHITE = "white"
+const BLACK = "black"
+let board = []
+let pieces = {} 
 
 function getPossibleMoveArrays(kind, color) {
     switch (kind) {
@@ -35,14 +36,36 @@ function getPossibleMoveArrays(kind, color) {
 class Cell {
     constructor(id) {
         this.id = id;
+        this.kind = null;
+        this.color = null;
+        this.pieceId = null; 
     }
     getId() {
         return this.id < 10 ? `0${this.id} ` : `${this.id} `;
     }
+
+    setPiece(piece) {
+        if ( piece.color == this.color ) {
+            return false 
+        } else {
+            if ( this.pieceId !== null ) {
+                // KILL THIS ONE!
+            } else {
+                this.pieceId = piece.pieceId
+                this.kind = piece.kind 
+                this.color = piece.color 
+            }
+            return true 
+        }
+    }
+    getPiece() { 
+        return this.pieceId 
+    }
 }
 
 class Piece {
-    constructor(color, kind, location, limit) {
+    constructor(id, color, kind, location, limit) {
+        this.id = id
         this.color = color;
         this.kind = kind;
         this.setLocation(location);
@@ -82,7 +105,7 @@ function getPossibleMoves(movements, location, loop, limit, possibles) {
 }
 
 function placePiece(piece, location) {
-    
+
     piece.setLocation(location);
     let possibles = [];
     piece.moves.forEach((move) => {
@@ -90,6 +113,18 @@ function placePiece(piece, location) {
     });
     return possibles;
 }
+
+function setup() { 
+    for (let i = 0; i < 64; i++) {
+        let c = new Cell(i)
+        board.push(c)
+    }
+}
+
+function getBoard() { 
+    return board 
+}
+
 
 module.exports = {
     PAWN,
@@ -103,5 +138,8 @@ module.exports = {
     Cell,
     Piece,
     placePiece,
-    getPossibleMoveArrays
+    getPossibleMoveArrays,
+    setup, 
+    getBoard,
+    pieces 
 };
